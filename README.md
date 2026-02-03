@@ -185,7 +185,7 @@ Automated Email Delivery (Apps Script)
 
 ![Email Snapshot](assets/email_snapshot.png)
 
-**Subject**: `[CRITICAL | HIGH] GA4 Anomaly Alert - purchase`
+**Subject**: `[HIGH | HIGH] GA4 Anomaly Alert - purchase`
 
 **Body Includes**:
 - Client & GA4 property
