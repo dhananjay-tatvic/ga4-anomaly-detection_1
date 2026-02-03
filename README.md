@@ -210,7 +210,7 @@ Automated Email Delivery (Apps Script)
 
 ## 📚 Related Documentation
 
-- [LOGIC.md](logic.md) – Detailed severity, business impact, root cause, and recommendation logic
+- [Logic.md](Logic.md) – Detailed severity, business impact, root cause, and recommendation logic
 - [diagrams/architecture.png](diagrams/architecture.png) – System architecture diagram
 
 ---
