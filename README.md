@@ -220,10 +220,20 @@ Automated Email Delivery (Apps Script)
 
 ## 👥 Maintainers
 
-- **Dhananjay** (`dhananjay@tatvic.com`)
-- **Ronit** (`ronit@tatvic.com`)
-- **Aarya** (`aarya@tatvic.com`)
-- **Vishnu** (`vishnu@tatvic.com`)
+- **Dhananjay Kanjariya** (`dhananjay@tatvic.com`)
+- **Ronit Rajput** (`ronit@tatvic.com`)
+- **Aarya Samaiya** (`aarya@tatvic.com`)
+- **Vishnu Nair** (`vishnu@tatvic.com`)
+
+---
+
+## 👥 Mentors
+
+- **Ravi Pathak** 
+- **Sarjak Patel** 
+- **Khilav Joshi**
+- **Dharmik Raval**
+- **Ruchika Parikh**
 
 ---
 
