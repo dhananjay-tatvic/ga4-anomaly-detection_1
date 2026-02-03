@@ -212,6 +212,8 @@ Automated Email Delivery (Apps Script)
 
 - [Logic.md](Logic.md) – Detailed severity, business impact, root cause, and recommendation logic
 - [diagrams/architecture.png](diagrams/architecture.png) – System architecture diagram
+- [diagrams/workflow.png](diagrams/workflow.png) – Workflow Diagram
+
 
 ---
 
