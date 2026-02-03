@@ -144,7 +144,7 @@ Automated Email Delivery (Apps Script)
 - **Directional Logic**: Decline-only for revenue, bidirectional for traffic
 - **Severity Levels**: CRITICAL, HIGH, MEDIUM, LOW, NONE
 - **Root Cause & Recommendations**: Deviation-band-specific
-- **Files**: `sql/scoring/severity_business_logic.sql`, `LOGIC.md`
+- **Files**: `sql/scoring/severity_business_logic.sql`, `Logic.md`
 
 ### 11. Alert Decisioning
 - **Eligibility**: `is_anomaly = TRUE`, severity ∈ {HIGH, CRITICAL}, impact ∈ {HIGH, VERY_HIGH}
