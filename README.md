@@ -39,6 +39,7 @@ ga4-anomaly-detlection-solution/
 │
 └── diagrams/
     └── architecture.png             # System architecture diagram
+    └── wokflow.png                  # Workflow Diagram
 ```
 
 ---
