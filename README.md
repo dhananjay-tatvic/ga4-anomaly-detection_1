@@ -211,9 +211,16 @@ Automated Email Delivery (Apps Script)
 
 ## 📚 Related Documentation
 
-- [Logic.md](Logic.md) – Detailed severity, business impact, root cause, and recommendation logic
-- [diagrams/architecture.png](diagrams/architecture.png) – System architecture diagram
-- [diagrams/workflow.png](diagrams/workflow.png) – Workflow Diagram
+### 📄 Detailed Logic
+- **[Logic.md](Logic.md)** – Detailed severity, business impact, root cause, and recommendation logic
+
+### 🏗️ Architecture Diagrams
+- **Local File:** [📐 `diagrams/architecture.png`](diagrams/architecture.png)
+- **Web Link:** [🌐 Online Architecture Diagram]([https://your-domain.com/diagrams/architecture.png](https://drive.google.com/file/d/1e5AgV3-ADN9nwADTmWVg8-1ON7VLWWDG/view?usp=sharing)) 
+
+### 🔄 Workflow Diagrams
+- **Local File:** [📊 `diagrams/workflow.png`](diagrams/workflow.png)
+- **Web Link:** [🌐 Online Workflow Diagram]([https://your-domain.com/diagrams/workflow.png](https://drive.google.com/file/d/19vq-sDpeUHRY4B8piJy63SiNYe_mFwrM/view?usp=sharing))
 
 
 ---
