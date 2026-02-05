@@ -12,6 +12,8 @@ ga4-anomaly-detlection-solution/
 ├── README.md                        # Project overview & architecture
 ├── LOGIC.md                         # Severity, business impact & root cause logic
 │
+├── Report_Capstone_G5.pdf           # Project Report
+|
 ├── sql/
 │   ├── synthetic_data/
 │   │   ├── daily_data_generator.sql
@@ -37,6 +39,7 @@ ga4-anomaly-detlection-solution/
 │
 └── diagrams/
     └── architecture.png             # System architecture diagram
+    └── wokflow.png                  # Workflow Diagram
 ```
 
 ---
@@ -142,7 +145,7 @@ Automated Email Delivery (Apps Script)
 - **Directional Logic**: Decline-only for revenue, bidirectional for traffic
 - **Severity Levels**: CRITICAL, HIGH, MEDIUM, LOW, NONE
 - **Root Cause & Recommendations**: Deviation-band-specific
-- **Files**: `sql/scoring/severity_business_logic.sql`, `LOGIC.md`
+- **Files**: `sql/scoring/severity_business_logic.sql`, `Logic.md`
 
 ### 11. Alert Decisioning
 - **Eligibility**: `is_anomaly = TRUE`, severity ∈ {HIGH, CRITICAL}, impact ∈ {HIGH, VERY_HIGH}
@@ -183,7 +186,7 @@ Automated Email Delivery (Apps Script)
 
 ![Email Snapshot](assets/email_snapshot.png)
 
-**Subject**: `[CRITICAL | HIGH] GA4 Anomaly Alert - purchase`
+**Subject**: `[HIGH | HIGH] GA4 Anomaly Alert - purchase`
 
 **Body Includes**:
 - Client & GA4 property
@@ -208,17 +211,36 @@ Automated Email Delivery (Apps Script)
 
 ## 📚 Related Documentation
 
-- [LOGIC.md](LOGIC.md) – Detailed severity, business impact, root cause, and recommendation logic
-- [diagrams/architecture.png](diagrams/architecture.png) – System architecture diagram
+### 📄 Detailed Logic
+- **[Logic.md](Logic.md)** – Detailed severity, business impact, root cause, and recommendation logic
+
+### 🏗️ Architecture Diagrams
+- **Local File:** [📐 `diagrams/architecture.png`](diagrams/architecture.png)
+- **Web Link:** [🌐 Online Architecture Diagram](https://drive.google.com/file/d/1e5AgV3-ADN9nwADTmWVg8-1ON7VLWWDG/view?usp=sharing)
+
+### 🔄 Workflow Diagrams
+- **Local File:** [📊 `diagrams/workflow.png`](diagrams/workflow.png)
+- **Web Link:** [🌐 Online Workflow Diagram](https://drive.google.com/file/d/19vq-sDpeUHRY4B8piJy63SiNYe_mFwrM/view?usp=sharing)
+
 
 ---
 
 ## 👥 Maintainers
 
-- **Dhananjay** (`dhananjay@tatvic.com`)
-- **Ronit** (`ronit@tatvic.com`)
-- **Aarya** (`aarya@tatvic.com`)
-- **Vishnu** (`vishnu@tatvic.com`)
+- **Dhananjay Kanjariya** (`dhananjay@tatvic.com`)
+- **Ronit Rajput** (`ronit@tatvic.com`)
+- **Aarya Samaiya** (`aarya@tatvic.com`)
+- **Vishnu Nair** (`vishnu@tatvic.com`)
+
+---
+
+## 👥 Mentors
+
+- **Ravi Pathak** 
+- **Sarjak Patel** 
+- **Khilav Joshi**
+- **Dharmik Raval**
+- **Ruchika Parikh**
 
 ---
 
