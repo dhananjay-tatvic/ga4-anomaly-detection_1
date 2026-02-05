@@ -227,6 +227,23 @@ Automated Email Delivery (Apps Script)
 
 ---
 
+# 🔮 Future Enhancements
+
+## ⚙️ Configurable Monitoring
+Externalize thresholds, severity mappings, and monitored events into configuration tables or a lightweight UI.  
+This enables business teams to adjust sensitivity and rules without modifying SQL.
+
+## 📣 Campaign-Aware Intelligence
+Integrate campaign and marketing metadata to distinguish expected spikes (ads, promotions, launches) from genuine anomalies.  
+This reduces false positives and improves root cause accuracy.
+
+---
+
+**Strategic Direction:**  
+Evolve from a rule-based monitoring system to a configurable, context-aware analytics intelligence platform — without redesigning the core architecture.
+
+---
+
 ## 👥 Maintainers
 
 - **Dhananjay Kanjariya** (`dhananjay@tatvic.com`)
