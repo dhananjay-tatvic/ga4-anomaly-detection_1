@@ -237,8 +237,6 @@ This enables business teams to adjust sensitivity and rules without modifying SQ
 Integrate campaign and marketing metadata to distinguish expected spikes (ads, promotions, launches) from genuine anomalies.  
 This reduces false positives and improves root cause accuracy.
 
----
-
 **Strategic Direction:**  
 Evolve from a rule-based monitoring system to a configurable, context-aware analytics intelligence platform — without redesigning the core architecture.
 
