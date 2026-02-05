@@ -14,7 +14,7 @@ ga4-anomaly-detlection-solution/
 │
 ├── Report_Capstone_G5.pdf           # Project Report
 |
-├── sql/
+├── codebase/
 │   ├── synthetic_data/
 │   │   ├── daily_data_generator.sql
 │   │   ├── anomaly_injector.sql
@@ -30,9 +30,9 @@ ga4-anomaly-detlection-solution/
 │   ├── scoring/
 │   │   ├── severity_business_logic.sql
 │   │   ├── alert_decision.sql
-│
-├── apps_script/
-│   ├── email_alert_pipeline.gs
+│   |
+|   ├── app_scipt/
+│   |   ├── Code.gs
 │
 ├── assets/
 │   └── email_snapshot.png           # Example email alert
