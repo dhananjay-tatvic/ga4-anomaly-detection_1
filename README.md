@@ -11,7 +11,12 @@ ga4-anomaly-detlection-solution/
 │
 ├── README.md                        # Project overview & architecture
 ├── LOGIC.md                         # Severity, business impact & root cause logic
-│
+|
+├── Documentation/
+│   ├── Project Charter.docx
+│   ├── Project Completion Plan.pdf
+│   
+|
 ├── codebase/
 │   ├── synthetic_data/
 │   │   ├── daily_data_generator.sql
