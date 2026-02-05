@@ -16,7 +16,6 @@ ga4-anomaly-detlection-solution/
 │   ├── Project Charter.docx
 │   ├── Project Completion Plan.pdf
 │   
-|
 ├── codebase/
 │   ├── synthetic_data/
 │   │   ├── daily_data_generator.sql
