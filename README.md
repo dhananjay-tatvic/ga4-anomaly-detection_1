@@ -12,7 +12,6 @@ ga4-anomaly-detlection-solution/
 ├── README.md                        # Project overview & architecture
 ├── LOGIC.md                         # Severity, business impact & root cause logic
 │
-├── Report_Capstone_G5.pdf           # Project Report
 |
 ├── codebase/
 │   ├── synthetic_data/
