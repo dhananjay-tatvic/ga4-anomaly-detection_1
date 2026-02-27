@@ -16,15 +16,15 @@ The system evolves from a deterministic statistical anomaly detector (Phase 1) i
 ## 📁 Repository Structure
 
 ```
-ga4-anomaly-detection-solution/
+ga4-anomaly-detlection-solution/
 │
-├── README.md
-├── LOGIC.md
-│
+├── README.md                        # Project overview & architecture
+├── LOGIC.md                         # Severity, business impact & root cause logic
+|
 ├── Documentation/
 │   ├── Project Charter.docx
 │   ├── Project Completion Plan.pdf
-│
+│   
 ├── codebase/
 │   ├── synthetic_data/
 │   │   ├── daily_data_generator.sql
@@ -34,6 +34,13 @@ ga4-anomaly-detection-solution/
 │   │   ├── loading_to_daily_metric.sql
 │   │   ├── processing_gap_filling.sql
 │   │
+|   ├── agent/
+|   |   ├── Dockerfile
+|   |   ├── context_agent_readonly.py
+|   |   ├── create_email_view.sql
+|   |   ├── requirements.txt
+|   |   ├── ga4_context_agent.py
+|   |
 │   ├── modeling/
 │   │   ├── calculating_statistical_metric.sql
 │   │   ├── ARIMA_retrain_30_days.sql
@@ -41,31 +48,17 @@ ga4-anomaly-detection-solution/
 │   ├── scoring/
 │   │   ├── severity_business_logic.sql
 │   │   ├── alert_decision.sql
-│   │
-│   ├── agent/
-│   │   ├── Dockerfile
-│   │   ├── ga4_context_agent.py
-│   │   ├── context_agent_readonly.py
-│   │   ├── create_email_view.sql
-│   │   ├── requirements.txt
-│   │
-│   ├── config/
-│   │   ├── create_config_table.sql
-│   │
-│   ├── context/
-│   │   ├── marketing_context_refresh.sql
-│   │
-│   ├── app_script/
-│   │   ├── Code.gs
+│   |
+|   ├── app_scipt/
+│   |   ├── Code.gs
 │
 ├── assets/
-│   └── email_snapshot.png
+│   └── email_snapshot.png           # Example email alert
 │
 └── diagrams/
-    ├── architecture.png
-    └── workflow.png
+    └── architecture.png             # System architecture diagram
+    └── wokflow.png                  # Workflow Diagram
 ```
-
 ---
 
 ## 🚀 System Overview
@@ -319,6 +312,49 @@ Email payload dynamically adjusts root cause if `context_override = TRUE`.
 
 ---
 
+## 📧 Alert Email Example
+
+![Email Snapshot](assets/email_snapshot.png)
+
+**Subject**: `[HIGH | HIGH] GA4 Anomaly Alert - purchase`
+
+**Body Includes**:
+- Client & GA4 property
+- Metric, date, timezone
+- Actual vs expected values with deviation %
+- Severity & business impact
+- Suspected root cause
+- Recommended immediate actions
+
+---
+
+## 🛡️ Production-Grade Guarantees
+
+- ✅ **Idempotent**: Safe re-runs & backfills
+- ✅ **Deterministic**: Same input → same output
+- ✅ **Auditable**: All logic in SQL, no black boxes
+- ✅ **Scalable**: Serverless, batch-oriented
+- ✅ **Maintainable**: Clear separation of concerns
+- ✅ **Extensible**: Add metrics/models without refactoring
+
+---
+
+## 📚 Related Documentation
+
+### 📄 Detailed Logic
+- **[Logic.md](Logic.md)** – Detailed severity, business impact, root cause, and recommendation logic
+
+### 🏗️ Architecture Diagrams
+- **Local File:** [📐 `diagrams/architecture.png`](diagrams/architecture.png)
+- **Web Link:** [🌐 Online Architecture Diagram](https://drive.google.com/file/d/1e5AgV3-ADN9nwADTmWVg8-1ON7VLWWDG/view?usp=sharing)
+
+### 🔄 Workflow Diagrams
+- **Local File:** [📊 `diagrams/workflow.png`](diagrams/workflow.png)
+- **Web Link:** [🌐 Online Workflow Diagram](https://drive.google.com/file/d/19vq-sDpeUHRY4B8piJy63SiNYe_mFwrM/view?usp=sharing)
+
+
+---
+
 ## 🕒 Scheduling
 
 ### Execution Timeline (UTC)
@@ -385,16 +421,3 @@ Without redesigning core architecture.
 ## 📄 License
 
 **Proprietary** – Tatvic Analytics Private Limited.
-
----
-
-> If you'd like next, I can:
-> • Add a professional GitHub badges section  
-> • Add a Phase 2 architecture diagram block for README  
-> • Generate a System Design Doc (SDD)  
-> • Create a `deploy.md` guide  
-> • Create investor/demo pitch version  
-> • Convert this into a whitepaper  
-> 
-> Tell me the next target 🚀
-```
