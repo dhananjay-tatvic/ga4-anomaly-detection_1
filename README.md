@@ -25,6 +25,13 @@ ga4-anomaly-detlection-solution/
 │   │   ├── loading_to_daily_metric.sql
 │   │   ├── processing_gap_filling.sql
 │   │
+|   ├── agent/
+|   |   ├── Dockerfile
+|   |   ├── context_agent_readonly.py
+|   |   ├── create_email_view.sql
+|   |   ├── requirements.txt
+|   |   ├── ga4_context_agent.py
+|   |
 │   ├── modeling/
 │   │   ├── calculating_statistical_metric.sql
 │   │   ├── ARIMA_retrain_30_days.sql
