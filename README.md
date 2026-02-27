@@ -1,6 +1,15 @@
+```markdown
 # GA4 Anomaly Detection Platform – Technical Documentation
 
-This repository contains the complete implementation of a **production-grade, serverless GA4 anomaly detection platform** built on **Google BigQuery**, **BigQuery ML**, and **Google Apps Script**.
+This repository contains the complete implementation of a **production-grade, serverless, context-aware GA4 anomaly detection platform** built on:
+
+- **Google BigQuery**
+- **BigQuery ML (ARIMA_PLUS)**
+- **Cloud Run + Gemini 2.5 Flash (LLM Intelligence Layer)**
+- **Google Cloud Scheduler**
+- **Google Apps Script**
+
+The system evolves from a deterministic statistical anomaly detector (Phase 1) into a **configurable, context-aware anomaly intelligence platform (Phase 2)**.
 
 ---
 
@@ -50,144 +59,256 @@ ga4-anomaly-detlection-solution/
     └── architecture.png             # System architecture diagram
     └── wokflow.png                  # Workflow Diagram
 ```
-
 ---
 
 ## 🚀 System Overview
 
-A fully serverless, batch-oriented anomaly detection platform for GA4 e-commerce metrics, built entirely on Google Cloud Platform. The system:
+A fully serverless anomaly intelligence platform for GA4 e-commerce metrics that:
 
-- **Generates synthetic GA4 events** with realistic seasonality & holidays
-- **Trains per-metric ARIMA_PLUS models** for forecasting
-- **Detects anomalies** using prediction intervals & ML.DETECT_ANOMALIES
-- **Classifies severity & business impact** with metric-specific logic
-- **Decides alert eligibility** with suppression & business-hour rules
-- **Sends automated email alerts** via Google Apps Script
+### Phase 1 – Deterministic Statistical Detection
+- Generates synthetic GA4 events
+- Aggregates daily metrics
+- Forecasts using ARIMA_PLUS
+- Detects anomalies (statistical + ML)
+- Classifies severity & business impact
+- Decides alert eligibility
+- Sends automated email alerts
+
+### Phase 2 – Context-Aware Intelligence
+- Introduces config-driven monitoring
+- Integrates campaign & news context
+- Deploys LLM-based contextual validation
+- Dynamically refines root cause narratives
+- Preserves deterministic alert logic
 
 ---
 
 ## 🧱 Architecture
 
-### 3.1 High-Level Flow
+### High-Level Pipeline (Phase 1 + Phase 2)
 
 ```
 Synthetic GA4 Events
-        ↓
+↓
 Daily Metric Aggregation
-        ↓
-Gap Filling (Zero Imputation)
-        ↓
-ARIMA_PLUS Forecasting (per metric)
-        ↓
-Anomaly Detection (Statistical + ML)
-        ↓
+↓
+Gap Filling
+↓
+ARIMA_PLUS Forecasting
+↓
+Anomaly Detection
+↓
 Severity & Business Impact Classification
-        ↓
+↓
+Context Agent (Cloud Run + Gemini)
+↓
 Alert Eligibility & Suppression
-        ↓
-Email Payload Construction
-        ↓
-Automated Email Delivery (Apps Script)
+↓
+Email Payload View
+↓
+Google Apps Script (Email Delivery)
 ```
-
-### 3.2 Key Design Principles
-
-- **Serverless & Batch-Oriented**: Built on BigQuery Scheduled Queries
-- **Deterministic & Idempotent**: Safe replays & backfills
-- **Strict Separation of Concerns**: Analytics (BigQuery) vs. Delivery (Apps Script)
-- **Timezone-Aware**: IST business days, UTC execution
-- **Materialized Dependency Chain**: Each stage outputs a concrete table
 
 ---
 
 ## 📊 Data Layers
 
-### 4.1 Datasets
+### Datasets
 
-| Dataset | Purpose |
-|---------|---------|
-| `GA4SampleData_live` | Raw synthetic GA4 events (immutable) |
-| `analytics_live` | Derived metrics, models, anomalies, decisions (mutable) |
+| Dataset                | Purpose                                  |
+|------------------------|------------------------------------------|
+| `GA4SampleData_live`   | Raw synthetic GA4 events                 |
+| `analytics_live`       | Derived metrics, models, anomalies, decisions |
 
-### 4.2 Core Tables
+### Core Tables
 
-| Table | Description |
-|-------|-------------|
-| `events_YYYYMMDD` | Daily synthetic GA4 events |
-| `ga4_event_metrics_daily` | Aggregated daily metrics |
-| `ga4_event_metrics_daily_filled` | Gap-filled metrics (zero for missing days) |
-| `ga4_anomaly_enriched_all_events` | Statistical anomalies with forecasts |
-| `ga4_anomaly_scored_events` | Severity, impact, root cause, recommendations |
-| `ga4_anomaly_alert_decisions` | Alert eligibility & suppression |
-| `ga4_anomaly_email_payload_view` | Final email payload (view) |
-
----
-
-## ⚙️ Pipeline Stages
-
-### 5. Synthetic Data Generation
-- **Purpose**: Simulates real GA4 events for development & testing
-- **Features**: Seasonality, holidays, user persistence, anomaly injection
-- **Files**: `sql/synthetic_data/daily_data_generator.sql`, `anomaly_injector.sql`
-
-### 6. Daily Metric Aggregation
-- **Purpose**: Transforms event-level data into daily time-series
-- **Metrics**: `page_view`, `session_start`, `user_engagement`, `add_to_cart`, `add_payment_info`, `purchase`
-- **Files**: `sql/aggregation/loading_to_daily_metric.sql`
-
-### 7. Gap Filling
-- **Purpose**: Ensures continuous time-series for modeling
-- **Logic**: LEFT JOIN + COALESCE(..., 0)
-- **Files**: `sql/aggregation/processing_gap_filling.sql`
-
-### 8. Time-Series Modeling
-- **Model**: ARIMA_PLUS (BigQuery ML)
-- **Strategy**: One model per metric, retrained every 30 days
-- **Files**: `sql/modeling/ARIMA_retrain_30_days.sql`
-
-### 9. Anomaly Detection
-- **Dual Signal**: Prediction interval breach + ML.DETECT_ANOMALIES
-- **Thresholds**: Metric-specific (e.g., purchase: 0.99, page_view: 0.97)
-- **Files**: `sql/modeling/calculating_statistical_metric.sql`
-
-### 10. Severity & Business Logic
-- **Directional Logic**: Decline-only for revenue, bidirectional for traffic
-- **Severity Levels**: CRITICAL, HIGH, MEDIUM, LOW, NONE
-- **Root Cause & Recommendations**: Deviation-band-specific
-- **Files**: `sql/scoring/severity_business_logic.sql`, `Logic.md`
-
-### 11. Alert Decisioning
-- **Eligibility**: `is_anomaly = TRUE`, severity ∈ {HIGH, CRITICAL}, impact ∈ {HIGH, VERY_HIGH}
-- **Suppression**: Outside business hours, repeated alerts
-- **Priority**: P0 (CRITICAL), P1 (HIGH + HIGH impact)
-- **Files**: `sql/scoring/alert_decision.sql`
-
-### 12. Email Delivery
-- **Logic-Free Apps Script**: Only fetches and sends
-- **One Email Per Metric**: Clear, actionable alerts
-- **Files**: `apps_script/email_alert_pipeline.gs`
+| Table                                   | Description                               |
+|-----------------------------------------|-------------------------------------------|
+| `events_YYYYMMDD`                       | Synthetic GA4 daily events                |
+| `ga4_event_metrics_daily`                | Aggregated daily metrics                  |
+| `ga4_event_metrics_daily_filled`         | Gap-filled metrics                        |
+| `ga4_anomaly_enriched_all_events`        | Forecast outputs                          |
+| `ga4_anomaly_scored_events`              | Severity & impact classification          |
+| `ga4_anomaly_contextualized_events`      | LLM-validated anomalies                   |
+| `ga4_anomaly_alert_decisions`            | Alert eligibility                         |
+| `ga4_anomaly_email_payload_view`         | Final email payload                       |
 
 ---
 
-## 🕒 Scheduling & Timezone Handling
+## ⚙️ Phase 1 – Statistical Anomaly Engine
 
-### Execution Schedule (UTC)
+### Synthetic Data
+- Seasonality modeling
+- Holiday multipliers
+- Persistent user simulation
+- Controlled anomaly injection
 
-| Time (UTC) | Job | Purpose |
-|------------|-----|---------|
-| 19:00 | Synthetic GA4 Generator | Create daily events |
-| 19:10 | Anomaly Injector | Inject probabilistic anomalies |
-| 20:30 | Metric Aggregation | Aggregate daily metrics |
-| 20:35 | Gap Filling | Ensure metric continuity |
-| 20:45 | Anomaly Detection | Forecast & classify anomalies |
-| 20:50 | Severity & Business Logic | Assign categories |
-| 20:55 | Alert Decision | Select high/critical alerts |
-| 21:00 | Email Script | Send final alerts |
+### Modeling
+- ARIMA_PLUS per metric
+- Retraining every 30 days
+- Prediction intervals enabled
 
-### Timezone Strategy
-- **Execution Timezone**: UTC (BigQuery Scheduled Queries)
-- **Business Timezone**: Asia/Kolkata (IST)
-- **Processing Rule**: Always process `yesterday` (IST)
+### Anomaly Detection
+Dual signal framework:
+1. Prediction interval breach
+2. `ML.DETECT_ANOMALIES`
+
+Metric-specific probability thresholds:
+- `purchase`: 0.99
+- `session_start`: 0.99
+- `page_view`: 0.97
+
+---
+
+### Severity & Business Logic
+
+- Decline-only logic for revenue metrics
+- Bidirectional logic for traffic metrics
+- Severity Levels: CRITICAL, HIGH, MEDIUM, LOW
+- Business Impact: VERY_HIGH, HIGH, MEDIUM, LOW
+- Root cause deviation-band stratification
+
+(See `LOGIC.md` for full rule definitions.)
+
+---
+
+### Alert Decision Layer
+
+Eligibility Rule:
+
+```
+is_anomaly = TRUE
+AND severity IN ('HIGH','CRITICAL')
+AND business_impact IN ('HIGH','VERY_HIGH')
+```
+
+Suppression:
+- Repeated alerts suppressed
+- CRITICAL alerts never suppressed
+
+Priority:
+- P0 → CRITICAL
+- P1 → HIGH + HIGH impact
+
+---
+
+## 🧠 Phase 2 – Context-Aware Intelligence Layer
+
+Phase 2 upgrades the system into a configurable, LLM-augmented anomaly intelligence platform.
+
+---
+
+### 1️⃣ Configuration-Driven Monitoring
+
+Thresholds and monitored metrics are externalized.
+
+#### Config Table
+
+```sql
+CREATE TABLE analytics_live.ga4_anomaly_config (
+  event_name STRING,
+  is_enabled BOOLEAN,
+  anomaly_probability_threshold FLOAT64,
+  medium_deviation_threshold FLOAT64,
+  critical_deviation_threshold FLOAT64
+);
+```
+
+**Benefits:**
+- Zero-code threshold changes
+- Business-controlled sensitivity
+- Multi-client scalability
+
+---
+
+### 2️⃣ Marketing Context Layer
+
+Campaign & news metadata refresh daily.
+
+#### `marketing_context` Table
+
+```sql
+CREATE OR REPLACE TABLE analytics_live.marketing_context
+PARTITION BY context_date
+AS
+SELECT
+  DATE_SUB(CURRENT_DATE('Asia/Kolkata'), INTERVAL 1 DAY) AS context_date,
+  'CAMPAIGN' AS context_type,
+  campaign_name AS title,
+  description
+FROM campaign_context_base
+UNION ALL
+SELECT
+  DATE_SUB(CURRENT_DATE('Asia/Kolkata'), INTERVAL 1 DAY),
+  'NEWS',
+  headline,
+  description
+FROM news_context_base;
+```
+
+Scheduled at **08:30 UTC**.
+
+---
+
+### 3️⃣ Cloud Run Context Agent
+
+#### Purpose
+Determines whether anomaly is:
+- `INFLUENCED`
+- `NOT_INFLUENCED`
+
+Based on marketing/news context.
+
+#### Runtime Stack
+- Python 3.11
+- Flask
+- Vertex AI SDK
+- Gemini 2.5 Flash
+- BigQuery Client
+
+#### LLM Prompt Format
+```
+Return ONLY valid JSON.
+{"decision": "INFLUENCED"}
+OR
+{"decision": "NOT_INFLUENCED"}
+```
+
+#### Deployment
+```bash
+gcloud run deploy ga4-context-agent \
+  --image gcr.io/tvc-ecommerce/ga4-context-agent \
+  --region us-central1 \
+  --platform managed \
+  --allow-unauthenticated \
+  --memory 1Gi \
+  --timeout 900
+```
+
+#### Scheduler Trigger
+```bash
+gcloud scheduler jobs create http ga4-context-agent-job \
+  --schedule="0 21 * * *" \
+  --uri="https://<service-url>/run" \
+  --http-method=POST \
+  --time-zone="UTC"
+```
+
+Runs daily at **21:00 UTC** (02:30 IST).
+
+---
+
+### 4️⃣ Contextualized Output
+
+**Table:** `ga4_anomaly_contextualized_events`
+
+Adds:
+- `context_override`
+- `context_source`
+- `context_summary`
+- `context_decision_time`
+
+Email payload dynamically adjusts root cause if `context_override = TRUE`.
 
 ---
 
@@ -234,40 +355,69 @@ Automated Email Delivery (Apps Script)
 
 ---
 
-# 🔮 Future Enhancements
+## 🕒 Scheduling
 
-## ⚙️ Configurable Monitoring
-Externalize thresholds, severity mappings, and monitored events into configuration tables or a lightweight UI.  
-This enables business teams to adjust sensitivity and rules without modifying SQL.
+### Execution Timeline (UTC)
 
-## 📣 Campaign-Aware Intelligence
-Integrate campaign and marketing metadata to distinguish expected spikes (ads, promotions, launches) from genuine anomalies.  
-This reduces false positives and improves root cause accuracy.
+| Time   | Stage                   |
+|--------|-------------------------|
+| 08:30  | Marketing Context Refresh |
+| 19:00  | Synthetic Generator     |
+| 19:10  | Anomaly Injector        |
+| 20:30  | Aggregation             |
+| 20:35  | Gap Filling             |
+| 20:45  | Anomaly Detection       |
+| 20:50  | Severity Logic          |
+| 20:55  | Alert Decision          |
+| 21:00  | Context Agent           |
+| 21:05  | Email Delivery          |
 
-**Strategic Direction:**  
-Evolve from a rule-based monitoring system to a configurable, context-aware analytics intelligence platform — without redesigning the core architecture.
+---
+
+## 📧 Email Delivery
+
+- Logic-free Apps Script
+- One email per metric
+- Uses `ga4_anomaly_email_payload_view`
+- Exactly-once semantics
+
+---
+
+## 🛡️ Production-Grade Guarantees
+
+- Idempotent daily processing
+- Deterministic outputs
+- IST-safe date handling
+- Serverless architecture
+- Strict separation of concerns
+- Replay-safe
+- Config-driven extensibility
+- LLM isolated from alert eligibility
+
+---
+
+## 🔮 Strategic Direction
+
+The platform evolves from:
+
+1. **Deterministic anomaly detection**
+2. **Configurable monitoring**
+3. **Context-aware intelligence**
+4. **LLM-augmented analytics reasoning**
+
+Without redesigning core architecture.
 
 ---
 
 ## 👥 Maintainers
 
-- **Dhananjay Kanjariya** (`dhananjay@tatvic.com`)
-- **Ronit Rajput** (`ronit@tatvic.com`)
-- **Aarya Samaiya** (`aarya@tatvic.com`)
-- **Vishnu Nair** (`vishnu@tatvic.com`)
-
----
-
-## 👥 Mentors
-
-- **Ravi Pathak** 
-- **Sarjak Patel** 
-- **Khilav Joshi**
-- **Dharmik Raval**
-- **Ruchika Parikh**
+- Dhananjay Kanjariya  
+- Ronit Rajput  
+- Aarya Samaiya  
+- Vishnu Nair  
 
 ---
 
 ## 📄 License
 
-Proprietary – Tatvic Analytics Private Limited.
+**Proprietary** – Tatvic Analytics Private Limited.
