@@ -1,0 +1,6 @@
+flask
+google-cloud-bigquery
+google-cloud-aiplatform
+vertexai
+pytz
+gunicorn
